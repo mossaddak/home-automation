@@ -1,15 +1,15 @@
 import pandas as pd
 
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 
 def get_data():
-    df = pd.read_csv("Smart_Home_Fire_Risk_Balanced.csv")
+    data_frame = pd.read_csv("dataset.csv")
 
     leakage_cols = [
         "Fire_Risk",
@@ -19,8 +19,14 @@ def get_data():
         "Sprinkler_Status",
     ]
 
-    X = df.drop(columns=[c for c in leakage_cols if c in df.columns])
-    y = df["Fire_Risk"]
+    X = data_frame.drop(
+        columns=[
+            leakage_col
+            for leakage_col in leakage_cols
+            if leakage_col in data_frame.columns
+        ]
+    )
+    y = data_frame["Fire_Risk"]
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.30, random_state=42, stratify=y
